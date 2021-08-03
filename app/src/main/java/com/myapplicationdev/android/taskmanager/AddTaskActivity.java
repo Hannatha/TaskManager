@@ -10,6 +10,7 @@ import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -19,7 +20,7 @@ import java.util.ArrayList;
 
 public class AddTaskActivity extends AppCompatActivity {
 
-    int requestCode = 123;
+    int requestCode = 12345;
     int notificationID = 888;
     EditText etName, etDesc;
     Button btnAdd, btnCancel;
@@ -42,11 +43,20 @@ public class AddTaskActivity extends AppCompatActivity {
             public void onClick(View view) {
                 NotificationManager notificationManager = (NotificationManager)
                         getSystemService(NOTIFICATION_SERVICE);
-                DBHelper dbh = new DBHelper(getApplicationContext());
-                if (etName.getText().toString() != null && etDesc.getText().toString() != null) {
+
+                if (!etName.getText().toString().isEmpty() && !etDesc.getText().toString().isEmpty()) {
                     //inserting task
-                    dbh.insertTask(etDesc.getText().toString(), etName.getText().toString());
-                    dbh.close();
+                    String name = etName.getText().toString();
+                    String desc = etDesc.getText().toString();
+
+                    DBHelper db = new DBHelper(AddTaskActivity.this);
+                    db.insertTask(desc, name);
+                    Toast.makeText(getApplicationContext(), "Inserted", Toast.LENGTH_SHORT).show();
+                    Log.i("info", "Task: " + name + " Desc: " + desc);
+                    etName.setText("");
+                    etDesc.setText("");
+                    db.close();
+
 
                     //sending noti
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -60,7 +70,7 @@ public class AddTaskActivity extends AppCompatActivity {
 
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                     PendingIntent pIntent = PendingIntent.getActivity
-                            (getApplicationContext(), requestCode, intent,
+                            (AddTaskActivity.this, requestCode, intent,
                                     PendingIntent.FLAG_CANCEL_CURRENT);
 
                     // Build notification
@@ -68,7 +78,7 @@ public class AddTaskActivity extends AppCompatActivity {
                             NotificationCompat.Builder(getApplicationContext(), "default");
                     builder.setContentTitle("Task Manager Reminder");
                     builder.setContentText("Post Letters");
-                    builder.setSmallIcon(android.R.drawable.btn_star_big_off);
+                    builder.setSmallIcon(android.R.drawable.ic_dialog_info);
                     builder.setContentIntent(pIntent);
                     builder.setAutoCancel(true);
 
@@ -82,6 +92,13 @@ public class AddTaskActivity extends AppCompatActivity {
                             Toast.LENGTH_SHORT).show();
                 }
 
+            }
+        });
+
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
             }
         });
 
