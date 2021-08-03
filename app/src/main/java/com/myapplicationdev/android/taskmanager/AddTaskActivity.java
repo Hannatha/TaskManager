@@ -8,6 +8,10 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -74,11 +78,17 @@ public class AddTaskActivity extends AppCompatActivity {
                                     PendingIntent.FLAG_CANCEL_CURRENT);
 
                     // Build notification
-                    NotificationCompat.Builder builder = new
-                            NotificationCompat.Builder(getApplicationContext(), "default");
+                    Bitmap picture = BitmapFactory.decodeResource(getResources(), R.drawable.sentosa);
+                    Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+                    long[] vibrate = {0, 100, 200,300};
+
+                    NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), "default");
                     builder.setContentTitle("Task Manager Reminder");
                     builder.setContentText("Post Letters");
                     builder.setSmallIcon(android.R.drawable.ic_dialog_info);
+                    builder.setStyle(new NotificationCompat.BigPictureStyle().bigPicture(picture).bigLargeIcon(null));
+                    builder.setSound(alarmSound);
+                    builder.setVibrate(vibrate);
                     builder.setContentIntent(pIntent);
                     builder.setAutoCancel(true);
 
