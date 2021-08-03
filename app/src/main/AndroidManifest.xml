@@ -9,7 +9,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.TaskManager">
-        <activity android:name=".AddTaskActivity"></activity>
+        <receiver
+            android:name=".ScheduledNotificationReceiver"
+            android:enabled="true"
+            android:exported="true"></receiver>
+
+        <activity android:name=".AddTaskActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
