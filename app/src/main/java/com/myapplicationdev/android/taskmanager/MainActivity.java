@@ -30,12 +30,9 @@ public class MainActivity extends AppCompatActivity {
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, tasklist);
         listview.setAdapter(adapter);
 
-        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(MainActivity.this, AddTaskActivity.class);
-                startActivity(intent);
-            }
+        btnAddTask.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, AddTaskActivity.class);
+            startActivity(intent);
         });
     }
 
