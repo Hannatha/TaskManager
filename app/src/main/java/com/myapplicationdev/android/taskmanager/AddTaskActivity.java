@@ -3,6 +3,8 @@ package com.myapplicationdev.android.taskmanager;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 
+import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -21,6 +23,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class AddTaskActivity extends AppCompatActivity {
 
@@ -72,30 +75,38 @@ public class AddTaskActivity extends AppCompatActivity {
                         notificationManager.createNotificationChannel(channel);
                     }
 
+                    Calendar cal = Calendar.getInstance();
+                    cal.add(Calendar.SECOND, 2);
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                     PendingIntent pIntent = PendingIntent.getActivity
                             (AddTaskActivity.this, requestCode, intent,
                                     PendingIntent.FLAG_CANCEL_CURRENT);
 
                     // Build notification
-                    Bitmap picture = BitmapFactory.decodeResource(getResources(), R.drawable.sentosa);
-                    Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-                    long[] vibrate = {0, 100, 200,300};
 
-                    NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), "default");
-                    builder.setContentTitle("Task Manager Reminder");
-                    builder.setContentText("Post Letters");
-                    builder.setSmallIcon(android.R.drawable.ic_dialog_info);
-                    builder.setStyle(new NotificationCompat.BigPictureStyle().bigPicture(picture).bigLargeIcon(null));
-                    builder.setSound(alarmSound);
-                    builder.setVibrate(vibrate);
-                    builder.setContentIntent(pIntent);
-                    builder.setAutoCancel(true);
 
-                    Notification n = builder.build();
 
-                    // An integer good to have, for you to programmatically cancel it
-                    notificationManager.notify(notificationID, n);
+                    AlarmManager am = (AlarmManager) getSystemService(Activity.ALARM_SERVICE);
+                    am.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pIntent);
+
+//                    Bitmap picture = BitmapFactory.decodeResource(getResources(), R.drawable.sentosa);
+//                    Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+//                    long[] vibrate = {0, 100, 200,300};
+//
+//                    NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), "default");
+//                    builder.setContentTitle("Task Manager Reminder");
+//                    builder.setContentText("Post Letters");
+//                    builder.setSmallIcon(android.R.drawable.ic_dialog_info);
+//                    builder.setStyle(new NotificationCompat.BigPictureStyle().bigPicture(picture).bigLargeIcon(null));
+//                    builder.setSound(alarmSound);
+//                    builder.setVibrate(vibrate);
+//                    builder.setContentIntent(pIntent);
+//                    builder.setAutoCancel(true);
+//
+//                    Notification n = builder.build();
+//
+//                    // An integer good to have, for you to programmatically cancel it
+//                    notificationManager.notify(notificationID, n);
                     finish();
                 } else {
                     Toast.makeText(getApplicationContext(), "Do not leave any fields blank",
