@@ -21,8 +21,6 @@ public class ScheduledNotificationReceiver extends BroadcastReceiver {
 
     int reqCode = 12345;
     int notificationID = 888;
-
-
     @Override
     public void onReceive(Context context, Intent intent)  {
         NotificationManager notificationManager = (NotificationManager)
@@ -45,7 +43,6 @@ public class ScheduledNotificationReceiver extends BroadcastReceiver {
         Bitmap picture = BitmapFactory.decodeResource(context.getResources(), R.drawable.sentosa);
                     Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
                     long[] vibrate = {0, 100, 200,300};
-
                    NotificationCompat.Builder builder = new NotificationCompat.Builder(context,"default");
                    builder.setContentTitle("Task Manager Reminder");
                    builder.setContentText("Post Letters");
@@ -57,6 +54,6 @@ public class ScheduledNotificationReceiver extends BroadcastReceiver {
                    builder.setAutoCancel(true);
 
         Notification n = builder.build();
-        notificationManager.notify(888, n);
+        notificationManager.notify(notificationID, n);
     }
 }

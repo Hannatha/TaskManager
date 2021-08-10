@@ -63,50 +63,23 @@ public class AddTaskActivity extends AppCompatActivity {
                     etName.setText("");
                     etDesc.setText("");
                     db.close();
-
-
-                    //sending noti
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                        NotificationChannel channel = new
-                                NotificationChannel("default", "Default Channel",
-                                NotificationManager.IMPORTANCE_DEFAULT);
-
-                        channel.setDescription("This is for default notification");
-                        notificationManager.createNotificationChannel(channel);
-                    }
-
                     Calendar cal = Calendar.getInstance();
-                    cal.add(Calendar.SECOND, 2);
-                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                    PendingIntent pIntent = PendingIntent.getActivity
-                            (AddTaskActivity.this, requestCode, intent,
-                                    PendingIntent.FLAG_CANCEL_CURRENT);
+                    cal.add(Calendar.SECOND, 5);
 
-                    // Build notification
+                    Intent intent = new Intent(AddTaskActivity.this,
+                            ScheduledNotificationReceiver.class);
+
+                    PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                            AddTaskActivity.this, requestCode,
+                            intent, PendingIntent.FLAG_CANCEL_CURRENT);
+
+                    AlarmManager am = (AlarmManager)
+                            getSystemService(Activity.ALARM_SERVICE);
+                    am.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(),
+                            pendingIntent);
 
 
 
-                    AlarmManager am = (AlarmManager) getSystemService(Activity.ALARM_SERVICE);
-                    am.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pIntent);
-
-//                    Bitmap picture = BitmapFactory.decodeResource(getResources(), R.drawable.sentosa);
-//                    Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-//                    long[] vibrate = {0, 100, 200,300};
-//
-//                    NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), "default");
-//                    builder.setContentTitle("Task Manager Reminder");
-//                    builder.setContentText("Post Letters");
-//                    builder.setSmallIcon(android.R.drawable.ic_dialog_info);
-//                    builder.setStyle(new NotificationCompat.BigPictureStyle().bigPicture(picture).bigLargeIcon(null));
-//                    builder.setSound(alarmSound);
-//                    builder.setVibrate(vibrate);
-//                    builder.setContentIntent(pIntent);
-//                    builder.setAutoCancel(true);
-//
-//                    Notification n = builder.build();
-//
-//                    // An integer good to have, for you to programmatically cancel it
-//                    notificationManager.notify(notificationID, n);
                     finish();
                 } else {
                     Toast.makeText(getApplicationContext(), "Do not leave any fields blank",
